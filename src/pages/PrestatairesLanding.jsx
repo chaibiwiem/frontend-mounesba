@@ -137,12 +137,24 @@ function PrestatairesLanding() {
 
   // Prestataires de chaque categorie affichee, presentes sous son bandeau
   // (titre + description + CTA + image) - avec ou sans sous-categories.
+  // Requetes envoyees l'une apres l'autre (et non en parallele) : la base
+  // MySQL hebergee n'accepte que quelques connexions simultanees.
   useEffect(() => {
-    categories.forEach((cat) => {
-      searchListings({ category: cat.slug, limit: 8 })
-        .then((data) => setCategoryListings((prev) => ({ ...prev, [cat.id]: data.results })))
-        .catch(() => setCategoryListings((prev) => ({ ...prev, [cat.id]: [] })));
-    });
+    let cancelled = false;
+    (async () => {
+      for (const cat of categories) {
+        if (cancelled) return;
+        try {
+          const data = await searchListings({ category: cat.slug, limit: 8 });
+          if (!cancelled) setCategoryListings((prev) => ({ ...prev, [cat.id]: data.results }));
+        } catch {
+          if (!cancelled) setCategoryListings((prev) => ({ ...prev, [cat.id]: [] }));
+        }
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, [categories]);
 
   // Bandeau de cloture "Tous les prestataires..." : les categories
