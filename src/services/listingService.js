@@ -10,7 +10,36 @@ export const getListingBySlug = (categorySlug, listingSlug) =>
 export const getSimilarListings = (id) =>
   api.get(`/listings/${id}/similar`).then((res) => res.data);
 
-export const getCategories = () => api.get('/categories').then((res) => res.data);
+// Mise en cache + mutualisation des appels en vol : la Navbar, le Footer et
+// la plupart des pages appellent chacun getCategories() independamment au
+// montage, ce qui declenchait 3-4 requetes DB simultanees rien que pour les
+// categories sur une seule page (en plus des autres appels de la page) -
+// bien au-dessus des quelques connexions simultanees autorisees par la base
+// hebergee, provoquant des echecs aleatoires (categories vides sans autre
+// erreur visible). Les categories changent rarement (gerees par l'admin) :
+// un court TTL suffit a eviter la quasi-totalite de ces appels en double
+// sans jamais retarder une vraie mise a jour de plus d'une minute.
+let categoriesCache = null;
+let categoriesInFlight = null;
+const CATEGORIES_CACHE_TTL = 60000;
+
+export const getCategories = () => {
+  if (categoriesCache && Date.now() - categoriesCache.timestamp < CATEGORIES_CACHE_TTL) {
+    return Promise.resolve(categoriesCache.data);
+  }
+  if (categoriesInFlight) return categoriesInFlight;
+
+  categoriesInFlight = api
+    .get('/categories')
+    .then((res) => {
+      categoriesCache = { data: res.data, timestamp: Date.now() };
+      return res.data;
+    })
+    .finally(() => {
+      categoriesInFlight = null;
+    });
+  return categoriesInFlight;
+};
 
 export const getCities = () => api.get('/cities').then((res) => res.data);
 

@@ -138,16 +138,38 @@ function Home() {
   const [popular, setPopular] = useState([]);
   const [cities, setCities] = useState([]);
 
+  // Requetes envoyees l'une apres l'autre (et non en parallele) : la base
+  // MySQL hebergee n'accepte que quelques connexions simultanees - 3 appels
+  // paralleles par visiteur au chargement de l'accueil suffisaient a en
+  // faire echouer un au hasard (categories vides sans autre erreur visible)
+  // des que plusieurs visiteurs arrivaient en meme temps.
   useEffect(() => {
-    getCategories()
-      .then(setCategories)
-      .catch(() => setCategories([]));
-    searchListings({ sort: 'popularity', limit: 12 })
-      .then((data) => setPopular(data.results))
-      .catch(() => setPopular([]));
-    getCitiesWithCounts()
-      .then((data) => setCities(data.filter((city) => city.count > 0)))
-      .catch(() => setCities([]));
+    let cancelled = false;
+    (async () => {
+      try {
+        const cats = await getCategories();
+        if (!cancelled) setCategories(cats);
+      } catch {
+        if (!cancelled) setCategories([]);
+      }
+
+      try {
+        const data = await searchListings({ sort: 'popularity', limit: 12 });
+        if (!cancelled) setPopular(data.results);
+      } catch {
+        if (!cancelled) setPopular([]);
+      }
+
+      try {
+        const data = await getCitiesWithCounts();
+        if (!cancelled) setCities(data.filter((city) => city.count > 0));
+      } catch {
+        if (!cancelled) setCities([]);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return (
