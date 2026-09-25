@@ -238,7 +238,7 @@ function ListingDetail() {
 
           {/* Desktop : mosaique 3 colonnes x 2 lignes (tuile principale + 3 tuiles,
               la derniere sur toute la largeur) avec boutons superposes. */}
-          <div className="relative hidden h-[420px] gap-2 overflow-hidden rounded-2xl sm:grid sm:grid-cols-3 sm:grid-rows-2">
+          <div className="relative hidden h-[530px] gap-2 overflow-hidden rounded-2xl sm:grid sm:grid-cols-3 sm:grid-rows-2">
             <MediaTile
               media={hero}
               onClick={() => handleTileClick(hero)}
