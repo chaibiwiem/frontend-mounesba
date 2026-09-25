@@ -166,7 +166,7 @@ function ListingDetail() {
   const videoMedia = (listing.videos || []).map((v) => ({ ...v, mediaType: 'video' }));
   const imageMedia = (listing.images || []).map((i) => ({ ...i, mediaType: 'image' }));
   const hero = videoMedia[0] || imageMedia[0];
-  const secondaryTiles = (hero?.mediaType === 'video' ? imageMedia : imageMedia.slice(1)).slice(0, 3);
+  const secondaryTiles = (hero?.mediaType === 'video' ? imageMedia : imageMedia.slice(1)).slice(0, 4);
 
   const handleTileClick = (media) => {
     if (!media) return;
@@ -244,14 +244,12 @@ function ListingDetail() {
               onClick={() => handleTileClick(hero)}
               className="col-span-1 row-span-2 h-full w-full"
             />
-            {secondaryTiles.map((media, index) => (
+            {secondaryTiles.map((media) => (
               <MediaTile
                 key={`${media.mediaType}-${media.id}`}
                 media={media}
                 onClick={() => handleTileClick(media)}
-                className={`h-full w-full ${
-                  index === 2 && secondaryTiles.length === 3 ? 'col-span-2' : 'col-span-1'
-                }`}
+                className="col-span-1 h-full w-full"
               />
             ))}
 
