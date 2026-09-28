@@ -190,7 +190,10 @@ function Home() {
         <div className="lg:hidden">
           <img src="/banner.jpeg" alt="" className="h-56 w-full object-cover sm:h-72" />
           <div className="flex flex-col justify-center px-4 py-10 sm:px-8 sm:py-14">
-            <h1 className="text-gray-900" style={{ fontFamily: 'Playfair Display, serif', fontSize: '40px', fontWeight: 600 }}>
+            <h1
+              className="text-gray-900 text-[28px] sm:text-[40px]"
+              style={{ fontFamily: 'Playfair Display, serif', fontWeight: 600 }}
+            >
               Organisez l&apos;événement
               <br />
               de vos rêves
