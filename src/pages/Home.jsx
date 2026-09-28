@@ -191,14 +191,12 @@ function Home() {
           <img src="/banner.jpeg" alt="" className="h-56 w-full object-cover sm:h-72" />
           <div className="flex flex-col justify-center px-4 py-10 sm:px-8 sm:py-14">
             <h1 className="text-gray-900" style={{ fontFamily: 'Playfair Display, serif', fontSize: '40px', fontWeight: 600 }}>
-              Votre occasion
+              Organisez l&apos;événement
               <br />
-              commence ici
+              de vos rêves
             </h1>
             <p className="mt-4 text-base text-gray-600">
-              Mariage, fiançailles, henné, thour, anniversaire
-              <br />
-              trouvez les bons professionnels partout en Tunisie.
+              Trouvez les meilleurs prestataires en Tunisie
             </p>
             <div className="mt-8">
               <CategorySearchBar categories={categories} />
@@ -211,14 +209,12 @@ function Home() {
         <div className="hidden lg:grid lg:grid-cols-2">
           <div className="flex flex-col justify-center px-8 py-16 xl:px-16 xl:py-24">
             <h1 className="text-gray-900" style={{ fontFamily: 'Playfair Display, serif', fontSize: '40px', fontWeight: 600 }}>
-              Votre occasion
+              Organisez l&apos;événement
               <br />
-              commence ici
+              de vos rêves
             </h1>
             <p className="mt-4 text-base text-gray-600">
-              Mariage, fiançailles, henné, thour, anniversaire
-              <br />
-              trouvez les bons professionnels partout en Tunisie.
+              Trouvez les meilleurs prestataires en Tunisie
             </p>
             <div className="mt-8">
               <CategorySearchBar categories={categories} />
