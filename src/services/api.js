@@ -106,4 +106,41 @@ api.interceptors.response.use(
   }
 );
 
+// La base hebergee n'accepte qu'un tres petit nombre de connexions
+// simultanees et echoue par intermittence sous charge (500 generique),
+// quelques secondes avant de se retablir seule - plutot que d'afficher une
+// section vide au premier echec, on retente automatiquement une requete GET
+// (donc sans effet de bord) avant d'abandonner pour de bon.
+const RETRYABLE_STATUS = new Set([500, 502, 503, 504]);
+const MAX_RETRIES = 2;
+const RETRY_DELAY_MS = 1200;
+
+function delay(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const { config } = error;
+    const isGet = config?.method === 'get';
+    const isRetryableStatus = RETRYABLE_STATUS.has(error.response?.status);
+    const isNetworkError = !error.response;
+
+    if (!config || !isGet || (!isRetryableStatus && !isNetworkError)) {
+      return Promise.reject(error);
+    }
+
+    config._retryCount = (config._retryCount || 0) + 1;
+    if (config._retryCount > MAX_RETRIES) {
+      return Promise.reject(error);
+    }
+
+    await delay(RETRY_DELAY_MS * config._retryCount);
+    return api(config);
+  }
+);
+
 export default api;
