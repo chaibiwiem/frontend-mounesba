@@ -114,16 +114,28 @@ function Footer() {
           </FooterSection>
 
           <FooterSection title="Réseaux sociaux">
-            {/* Icones a lier vers les vrais comptes Mounesba des qu'ils
-                existeront - volontairement non cliquables pour l'instant
-                (pas d'URL a fabriquer). */}
+            {/* TikTok reste non cliquable (span) tant que le compte Mounesba
+                n'existe pas - Instagram/Facebook pointent vers les vrais
+                comptes. */}
             <div className="flex items-center gap-3">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-gray-600">
+              <a
+                href="https://www.instagram.com/mounesbatn/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition hover:bg-rose-100 hover:text-rose-600"
+              >
                 <IconInstagram className="h-4 w-4" />
-              </span>
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-gray-600">
+              </a>
+              <a
+                href="https://www.facebook.com/profile.php?id=61594699323909"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition hover:bg-rose-100 hover:text-rose-600"
+              >
                 <IconFacebook className="h-4 w-4" />
-              </span>
+              </a>
               <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-gray-600">
                 <IconTikTok className="h-4 w-4" />
               </span>
