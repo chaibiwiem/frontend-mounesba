@@ -302,7 +302,7 @@ function PrestatairesLanding() {
                   </p>
                   <button
                     type="button"
-                    onClick={() => navigate(`/search?category=${cat.slug}`)}
+                    onClick={() => navigate(`/categorie/${cat.slug}`)}
                     className="mt-5 w-fit shrink-0 rounded-lg bg-rose-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-rose-700"
                   >
                     {CATEGORY_COPY[cat.slug]?.cta || `Voir ${cat.name.toLowerCase()}`}
